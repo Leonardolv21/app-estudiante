@@ -1,0 +1,101 @@
+-- Crear tabla Estudiante
+CREATE TABLE Estudiante (
+    id_estudiante SERIAL PRIMARY KEY,
+    nombre_completo VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    carrera VARCHAR(50) NOT NULL
+);
+
+-- Crear tabla Materia
+CREATE TABLE Materia (
+    codigo SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    num_creditos INTEGER NOT NULL
+);
+
+-- Crear tabla Notas
+CREATE TABLE Notas (
+    id_nota SERIAL PRIMARY KEY,
+    nombre_nota VARCHAR(50) NOT NULL,
+    puntaje FLOAT NOT NULL
+);
+
+
+-- Agregar columna de clave foránea en la tabla Materia
+ALTER TABLE Materia
+ADD COLUMN id_estudiante INTEGER,
+ADD CONSTRAINT fk_estudiante
+FOREIGN KEY (id_estudiante)
+REFERENCES Estudiante(id_estudiante);
+
+-- Agregar columna de clave foránea en la tabla Notas
+ALTER TABLE Notas
+ADD COLUMN codigo_materia INTEGER,
+ADD CONSTRAINT fk_materia
+FOREIGN KEY (codigo_materia)
+REFERENCES Materia(codigo);
+
+INSERT INTO Estudiante (nombre_completo, fecha_nacimiento, carrera) VALUES
+    ('Juan Perez', '1998-05-15', 'Ingeniería Informática'),
+    ('María López', '1997-09-20', 'Administración de Empresas'),
+    ('Carlos Rodríguez', '1999-03-10', 'Derecho');
+
+INSERT INTO Materia (codigo, nombre, num_creditos) VALUES
+    (1, 'Matemáticas I', 5),
+    (2, 'Programación Avanzada', 6),
+    (3, 'Gestión Empresarial', 4);
+   
+   INSERT INTO Notas (id_nota, nombre_nota, puntaje,id_materia) VALUES
+    (1, '1er parcial', 85,1),
+    (2, '2do parcial', 78,1),
+    (3, 'Examen Final', 90,1),
+    (4, '1er parcial', 92,2),
+    (5, '2do parcial', 88,2),
+    (6, 'Examen Final', 95,2),
+    (7, '1er parcial', 80,3),
+    (8, '2do parcial', 75,3),
+    (9, 'Examen Final', 85,3);
+
+select * from estudiante e;
+select * from materia m;
+select * from notas n;
+
+select n.id_nota,n.nombre_nota ,n.puntaje ,n.id_materia,m.codigo ,m.nombre 
+from notas n
+join materia m on n.id_grupo= m.codigo
+where m.nombre ilike 'matemáticas I';
+
+select * from notas n ;
+ 
+ALTER TABLE notas ADD COLUMN id_grupo INT;
+
+UPDATE notas
+SET id_grupo = 3
+WHERE id_nota = 9;
+
+UPDATE notas
+SET id_grupo = 2
+WHERE id_materia = 2;
+
+UPDATE notas
+SET id_grupo = 3
+WHERE id_materia = 3;
+
+
+
+ALTER TABLE Notas
+ADD COLUMN id_materia INT; 
+
+ALTER TABLE Notas
+ADD CONSTRAINT fk_materia
+FOREIGN KEY (id_materia)
+REFERENCES Materia(codigo); 
+
+
+ALTER TABLE materia 
+ADD COLUMN id_estudiante INT;
+
+ALTER TABLE materia 
+ADD CONSTRAINT fk_estudiante
+FOREIGN KEY (id_estudiante)
+REFERENCES Estudiante(id_estudiante); 
