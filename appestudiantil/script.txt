@@ -1,101 +1,81 @@
--- Crear tabla Estudiante
-CREATE TABLE Estudiante (
-    id_estudiante SERIAL PRIMARY KEY,
-    nombre_completo VARCHAR(100) NOT NULL,
-    fecha_nacimiento DATE NOT NULL,
-    carrera VARCHAR(50) NOT NULL
+create  TABLE Estudiante(
+    id_estudiante INT PRIMARY KEY,
+    nombre_completo VARCHAR(100),
+    fecha_nacimiento DATE,
+    carrera VARCHAR(100)
 );
 
--- Crear tabla Materia
-CREATE TABLE Materia (
-    codigo SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    num_creditos INTEGER NOT NULL
+select * from estudiante e 
+
+create TABLE Materia(
+    codigo INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    num_creditos INT
 );
 
--- Crear tabla Notas
-CREATE TABLE Notas (
-    id_nota SERIAL PRIMARY KEY,
-    nombre_nota VARCHAR(50) NOT NULL,
-    puntaje FLOAT NOT NULL
+create TABLE Estudiante_Materia(
+    id INT PRIMARY KEY,
+    id_estudiante INT,
+    codigo_materia INT,
+    FOREIGN KEY (id_estudiante) REFERENCES Estudiante(id_estudiante),
+    FOREIGN KEY (codigo_materia) REFERENCES Materia(codigo)
+);
+
+create TABLE Notas(
+    id_nota INT PRIMARY KEY,
+    nombre_nota varchar(25),
+    puntaje int,
+    codigo_materia INT,
+    id_estudiante INT,
+    FOREIGN KEY (codigo_materia) REFERENCES Materia(codigo),
+    FOREIGN KEY (id_estudiante) REFERENCES Estudiante(id_estudiante)
 );
 
 
--- Agregar columna de clave foránea en la tabla Materia
-ALTER TABLE Materia
-ADD COLUMN id_estudiante INTEGER,
-ADD CONSTRAINT fk_estudiante
-FOREIGN KEY (id_estudiante)
-REFERENCES Estudiante(id_estudiante);
+INSERT INTO Estudiante (id_estudiante, nombre_completo, fecha_nacimiento, carrera)
+VALUES
+    (1, 'Leo Loayza', '2000-02-27', 'Sistemas'),
+    (2, 'Richard Parra', '2001-05-02', 'Sistemas'),
+    (3, 'Angelo Rodriguez', '2004-06-12', 'Sistemas'),
+    (4, 'Laura González', '2000-08-12', 'Biología'),
+    (5, 'Pedro Rodríguez', '1996-12-03', 'Arquitectura'),
+    (6, 'Ana Sánchez', '2001-06-28', 'Psicología');
 
--- Agregar columna de clave foránea en la tabla Notas
-ALTER TABLE Notas
-ADD COLUMN codigo_materia INTEGER,
-ADD CONSTRAINT fk_materia
-FOREIGN KEY (codigo_materia)
-REFERENCES Materia(codigo);
+INSERT INTO Estudiante_Materia (id, id_estudiante ,codigo_materia)
+VALUES
+    (1, 1,1), -- Leo - Base2
+    (2, 2,1), -- Richard - Base2
+    (3, 2,2), -- Richard - S.O
+    (4, 3,3), -- Angelo - Pro4
+    (5, 1,3); -- Leo - Pro4
 
-INSERT INTO Estudiante (nombre_completo, fecha_nacimiento, carrera) VALUES
-    ('Juan Perez', '1998-05-15', 'Ingeniería Informática'),
-    ('María López', '1997-09-20', 'Administración de Empresas'),
-    ('Carlos Rodríguez', '1999-03-10', 'Derecho');
+INSERT INTO Materia (codigo, nombre , num_creditos)
+VALUES
+    (1,'Base2', 4),
+    (2,'S.O', 5),
+    (3,'Pro4', 4);
 
-INSERT INTO Materia (codigo, nombre, num_creditos) VALUES
-    (1, 'Matemáticas I', 5),
-    (2, 'Programación Avanzada', 6),
-    (3, 'Gestión Empresarial', 4);
+    
+INSERT INTO Notas (id_nota, nombre_nota , puntaje,codigo_materia, id_estudiante)
+VALUES
+    (1,'1er parcial',75, 1, 1), -- Leo - Base2
+    (2,'2do parcial',76, 1, 1), -- Richard - Base2
+    (3,'Examen Final',77,1, 1), -- Richard - S.O
+    (4,'1er parcial',81, 1, 2), -- Angelo - Pro4
+    (5,'2do parcial',82, 1, 2), -- Angelo - Pro4
+    (6,'Examen Final',83,1, 2); -- Angelo - Pro4
    
-   INSERT INTO Notas (id_nota, nombre_nota, puntaje,id_materia) VALUES
-    (1, '1er parcial', 85,1),
-    (2, '2do parcial', 78,1),
-    (3, 'Examen Final', 90,1),
-    (4, '1er parcial', 92,2),
-    (5, '2do parcial', 88,2),
-    (6, 'Examen Final', 95,2),
-    (7, '1er parcial', 80,3),
-    (8, '2do parcial', 75,3),
-    (9, 'Examen Final', 85,3);
 
-select * from estudiante e;
+SELECT e.nombre_completo AS nombre_estudiante, m.nombre, n.nombre_nota,n.puntaje
+FROM Estudiante e
+JOIN Estudiante_Materia em ON e.id_estudiante = em.id_estudiante 
+JOIN Materia m ON em.codigo_materia  = m.codigo 
+JOIN Notas n ON e.id_estudiante = n.id_estudiante AND m.codigo  = n.codigo_materia 
+ORDER BY e.nombre_completo , m.nombre;
+
+
+
+select * from estudiante e; 
 select * from materia m;
-select * from notas n;
-
-select n.id_nota,n.nombre_nota ,n.puntaje ,n.id_materia,m.codigo ,m.nombre 
-from notas n
-join materia m on n.id_grupo= m.codigo
-where m.nombre ilike 'matemáticas I';
-
 select * from notas n ;
- 
-ALTER TABLE notas ADD COLUMN id_grupo INT;
-
-UPDATE notas
-SET id_grupo = 3
-WHERE id_nota = 9;
-
-UPDATE notas
-SET id_grupo = 2
-WHERE id_materia = 2;
-
-UPDATE notas
-SET id_grupo = 3
-WHERE id_materia = 3;
-
-
-
-ALTER TABLE Notas
-ADD COLUMN id_materia INT; 
-
-ALTER TABLE Notas
-ADD CONSTRAINT fk_materia
-FOREIGN KEY (id_materia)
-REFERENCES Materia(codigo); 
-
-
-ALTER TABLE materia 
-ADD COLUMN id_estudiante INT;
-
-ALTER TABLE materia 
-ADD CONSTRAINT fk_estudiante
-FOREIGN KEY (id_estudiante)
-REFERENCES Estudiante(id_estudiante); 
+select * from estudiante_materia em;
