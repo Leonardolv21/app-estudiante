@@ -1,19 +1,23 @@
-create  TABLE Estudiante(
+
+select * from estudiante e;
+select * from materia m ;
+select * from notas n ;
+select * from estudiante_materia em ;
+
+CREATE TABLE Estudiante(
     id_estudiante INT PRIMARY KEY,
     nombre_completo VARCHAR(100),
     fecha_nacimiento DATE,
     carrera VARCHAR(100)
 );
 
-select * from estudiante e 
-
-create TABLE Materia(
+CREATE TABLE Materia(
     codigo INT PRIMARY KEY,
     nombre VARCHAR(100),
     num_creditos INT
 );
 
-create TABLE Estudiante_Materia(
+CREATE TABLE Estudiante_Materia(
     id INT PRIMARY KEY,
     id_estudiante INT,
     codigo_materia INT,
@@ -21,7 +25,7 @@ create TABLE Estudiante_Materia(
     FOREIGN KEY (codigo_materia) REFERENCES Materia(codigo)
 );
 
-create TABLE Notas(
+CREATE TABLE Notas(
     id_nota INT PRIMARY KEY,
     nombre_nota varchar(25),
     puntaje int,
@@ -32,50 +36,25 @@ create TABLE Notas(
 );
 
 
-INSERT INTO Estudiante (id_estudiante, nombre_completo, fecha_nacimiento, carrera)
-VALUES
-    (1, 'Leo Loayza', '2000-02-27', 'Sistemas'),
-    (2, 'Richard Parra', '2001-05-02', 'Sistemas'),
-    (3, 'Angelo Rodriguez', '2004-06-12', 'Sistemas'),
-    (4, 'Laura González', '2000-08-12', 'Biología'),
-    (5, 'Pedro Rodríguez', '1996-12-03', 'Arquitectura'),
-    (6, 'Ana Sánchez', '2001-06-28', 'Psicología');
+
 
 INSERT INTO Estudiante_Materia (id, id_estudiante ,codigo_materia)
 VALUES
-    (1, 1,1), -- Leo - Base2
-    (2, 2,1), -- Richard - Base2
-    (3, 2,2), -- Richard - S.O
-    (4, 3,3), -- Angelo - Pro4
-    (5, 1,3); -- Leo - Pro4
+    (1, 1,1), -- 
+    (2, 2,1), -- 
+    (3, 2,2), -- 
+    (4, 3,3), -- 
+    (5, 1,3); -- 
 
-INSERT INTO Materia (codigo, nombre , num_creditos)
-VALUES
-    (1,'Base2', 4),
-    (2,'S.O', 5),
-    (3,'Pro4', 4);
+
 
     
 INSERT INTO Notas (id_nota, nombre_nota , puntaje,codigo_materia, id_estudiante)
 VALUES
-    (1,'1er parcial',75, 1, 1), -- Leo - Base2
-    (2,'2do parcial',76, 1, 1), -- Richard - Base2
-    (3,'Examen Final',77,1, 1), -- Richard - S.O
-    (4,'1er parcial',81, 1, 2), -- Angelo - Pro4
-    (5,'2do parcial',82, 1, 2), -- Angelo - Pro4
-    (6,'Examen Final',83,1, 2); -- Angelo - Pro4
+    (1,'1er parcial',75, 1, 1), -- 
+    (2,'2do parcial',76, 1, 1), -- 
+    (3,'Examen Final',77,1, 1), -- 
+    (4,'1er parcial',81, 1, 2), -- 
+    (5,'2do parcial',82, 1, 2), -- 
+    (6,'Examen Final',83,1, 2); -- 
    
-
-SELECT e.nombre_completo AS nombre_estudiante, m.nombre, n.nombre_nota,n.puntaje
-FROM Estudiante e
-JOIN Estudiante_Materia em ON e.id_estudiante = em.id_estudiante 
-JOIN Materia m ON em.codigo_materia  = m.codigo 
-JOIN Notas n ON e.id_estudiante = n.id_estudiante AND m.codigo  = n.codigo_materia 
-ORDER BY e.nombre_completo , m.nombre;
-
-
-
-select * from estudiante e; 
-select * from materia m;
-select * from notas n ;
-select * from estudiante_materia em;
